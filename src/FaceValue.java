@@ -8,5 +8,5 @@ public enum FaceValue {
 	}
 	public int getNumValue() {
 		return numValue;
-	}	
+	}
 }
