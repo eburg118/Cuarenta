@@ -40,6 +40,10 @@ public class Deck {
     public void removeCard(int i) {
         this.cards.remove(i);
     }
+    
+    public void removeAll() {
+        this.cards.removeAll(this.cards);
+    }
 
     public Card getCard(int i) {
         return this.cards.get(i);

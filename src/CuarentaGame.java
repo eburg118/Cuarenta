@@ -32,46 +32,80 @@ public class CuarentaGame {
         player1Hand.drawHand(activeDeck);
         player2Hand.drawHand(activeDeck);
 
+        main: {
         while(!activeDeck.isEmpty()) {
-
 
 		    while(!player1Hand.isEmpty() && !player2Hand.isEmpty()) {
 		    	//System.out.println("Player1 Hand: " + player2Hand);
 		    	//Scanner playerInput = new Scanner(System.in);
-		    	if (tablePile.isEmpty()) {
-		    		boolean emptyTable = true;
-		    		p1Turn(player1Hand, tablePile, playerInput, emptyTable, p1PointPile);
-		    		System.out.println("Player 1 cardPoints: " + p1PointPile.showCardPoints());
-		    		//System.out.println("p1 pointPile size: " + p1PointsPile.deckSize());
-		    		System.out.println("Player 1 POINTS: " + player1Points + "\n" );
+		    	if ((p1PointPile.showCardPoints() + player1Points) > 40) {
+		    		System.out.println("Player 1 has 40 points - YOU WIN");
+		    		break main;
 		    	}
-		    	else if (!tablePile.isEmpty()) {
-		    		boolean emptyTable = false;
-		    		p1Turn(player1Hand, tablePile, playerInput, emptyTable, p1PointPile);
-		    		System.out.println("Player 1 cardPoints: " + p1PointPile.showCardPoints());
-		    		//System.out.println("p1 pointPile size: " + p1PointsPile.deckSize());
-		    		System.out.println("Player 1 POINTS: " + player1Points + "\n" );
-		    	}
+
+		    	System.out.println("***Player 1's Turn***\n");
+		    	System.out.println("Player 1 cardPoints: " + p1PointPile.showCardPoints());
+	    		System.out.println("Player 1 POINTS: " + player1Points + "\n" );
+	        	System.out.println("Player1 Hand: " + player1Hand + "\n");
+	        	//System.out.println("Player1 decksize: " + player1Hand.deckSize() );
+	            System.out.println("Which card # would you like to play? ");
+
+	            int rp = playerInput.nextInt();
+	            if (rp  == 0 || rp > player1Hand.deckSize()) {
+	            	//throw new ArithmeticException("You must play card that is in your hand ");
+	            	System.out.println("You must play card that is in your hand");
+	            }
+	            else {
+
+			    	if (tablePile.isEmpty()) {
+			    		boolean emptyTable = true;
+			    		p1Turn(player1Hand, tablePile, rp, emptyTable, p1PointPile);
+			    		System.out.println("Player 1 cardPoints: " + p1PointPile.showCardPoints());
+			    		System.out.println("Player 1 POINTS: " + player1Points + "\n" );
+			    	}
+			    	else if (!tablePile.isEmpty()) {
+			    		boolean emptyTable = false;
+			    		p1Turn(player1Hand, tablePile, rp, emptyTable, p1PointPile);
+			    		System.out.println("Player 1 cardPoints: " + p1PointPile.showCardPoints());
+			    		//System.out.println("p1 pointPile size: " + p1PointsPile.deckSize());
+			    		System.out.println("Player 1 POINTS: " + player1Points + "\n" );
+			    	}
+
 		    	// Should this also take  playerInput scanner object??
 		        p2Turn(player2Hand, tablePile);
 		        System.out.println("Player 2 POINTS: " + player2Points + "\n" );
+	            }
 
 		    }
+		    //System.out.println("Active deck size: " + activeDeck.deckSize());
+		    System.out.println("Player's hands are empty");
+		    System.out.println("Dealing cards . . .");
 		    player1Hand.drawHand(activeDeck);
-		    player2Hand.drawHand(activeDeck);
+		    //System.out.println("Active deck size: " + activeDeck.deckSize());
+		    //System.out.println("Active deck cards: " + activeDeck);
+
+		    // drawHand method giving issues so manually drew 5 cards at the end here
+		    //player2Hand.drawHand(activeDeck);
+		    player2Hand.draw(activeDeck);
+		    player2Hand.draw(activeDeck);
+		    player2Hand.draw(activeDeck);
+		    player2Hand.draw(activeDeck);
+		    player2Hand.draw(activeDeck);
+		    //System.out.println("Active deck size: " + activeDeck.deckSize());
+		    if (activeDeck.isEmpty()) {
+		    	System.out.println("END OF ROUND - WE ARE RESHUFFLING, CLEARING TABLE AND PASSING OUT NEXT ROUND HAND" + "\n");
+		    	tablePile.removeAll();
+		    	activeDeck.makeDeck();
+		        activeDeck.shuffle();
+		    }
 		}
+        }
+
+        playerInput.close();
     }
 
-
-    public static void p1Turn(Deck player1Hand, Deck tablePile, Scanner playerInput, Boolean isTurnWithEmptyTable, PlayerPoints pPointPile) {
-    	System.out.println("***Player 1's Turn***\n");
+    public static void p1Turn(Deck player1Hand, Deck tablePile, int rp, Boolean isTurnWithEmptyTable, PlayerPoints pPointPile) {
     	PlayerPoints p1PointPile = pPointPile;
-    	//System.out.println("P1 Deck Size: " + player1Hand.deckSize());
-    	System.out.println("Player1 Hand: " + player1Hand + "\n");
-        //System.out.println("Player2 Hand: " + player2Hand);
-        //System.out.println("Player1 first card value : " + player1Hand.getCard(0).getNumVal());
-        System.out.println("Which card # would you like to play? ");
-        int rp = playerInput.nextInt();
         //System.out.println("P1 playing: " + rp);
         //System.out.println("Player 1 played: " + player1Hand.getCard(rp - 1));
         switch (rp) {
@@ -94,6 +128,7 @@ public class CuarentaGame {
         //player1Hand.removeCard(rp-1);
         if (isTurnWithEmptyTable) {
         	player1Points += checkTable(tablePile, player1Hand, rp, isTurnWithEmptyTable, p1PointPile);
+
         	//p1PointsPile += p1PointsPile;
         }
         else if (!isTurnWithEmptyTable) {
@@ -149,9 +184,9 @@ public class CuarentaGame {
     	if(!emptyTable) {
     		int mostRecent = tablePile.deckSize() - 2;
 	        int mostRecentVal = tablePile.getCard(tablePile.deckSize() - 2).getNumVal();
-	        System.out.println("mostRecent card on table: " + mostRecentVal);
+	        //System.out.println("mostRecent card on table: " + mostRecentVal);
 	        int playerMatchCard = playerHand.getCard(rp-1).getNumVal();
-	        System.out.println("players card we are analyzing: " + playerMatchCard);
+	        //System.out.println("players card we are analyzing: " + playerMatchCard);
 
 	        //caida check
 	        if (playerMatchCard == mostRecentVal) {
