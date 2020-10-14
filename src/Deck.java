@@ -1,18 +1,26 @@
-// Kinda using deck class and its methods to handle interactions
-// between players hand, table pile, active deck (aka whatever is an array of cards)
-
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+* This is the class that is used to build our Deck object.
+* 
+* @author Eric Burgos
+* @version 1.0
+* @since 2020-09-24
+* @see Deck
+*/
 public class Deck {
 
+	/** Initializing array list of card objects */
     private ArrayList<Card> cards;
 
+    
+    /** Class constructor for Deck */
     public Deck() {
         this.cards = new ArrayList<Card>();
 
     }
-
+    /** Make the deck using Suit and FaceValue values */
     public void makeDeck() {
         for (Suit cardSuit : Suit.values()) {
             //Loop through Values
@@ -23,7 +31,7 @@ public class Deck {
         }
 
     }
-
+    /** Used to shuffle any deck object */
     public void shuffle() {
         ArrayList<Card> tmpDeck = new ArrayList<Card>();
         Random random = new Random();
@@ -37,39 +45,50 @@ public class Deck {
         this.cards = tmpDeck;
     }
 
+    /** Remove card from deck */
     public void removeCard(int i) {
         this.cards.remove(i);
     }
-    
+    /** Remove all cards from deck */
     public void removeAll() {
         this.cards.removeAll(this.cards);
     }
-
+    /** Get card */
     public Card getCard(int i) {
         return this.cards.get(i);
     }
-
+    /** Add card to a deck */
     public void addCard(Card addCard) {
         this.cards.add(addCard);
     }
 
+    /** Play card to a deck
+    * @param comingFrom Which deck are we getting card from
+    * @param which Index of card on that Card array
+    */
     public void playCard(Deck comingFrom, int which) {
         this.cards.add(comingFrom.getCard(which));
         // comingFrom.removeCard(which);
     }
-
+    
+    /** Draw card from top of deck
+    * @param comingFrom Which deck are we getting card from
+    */
     public void draw(Deck comingFrom) {
         this.cards.add(comingFrom.getCard(0));
         comingFrom.removeCard(0);
     }
 
+    /** Draw a hand of 5 cards from top of deck
+    * @param comingFrom Which deck are we getting card from
+    */
     public void drawHand(Deck comingFrom) {
         for (int i = 0; i < 5; i++) {
             this.cards.add(comingFrom.getCard(i));
             comingFrom.removeCard(i);
         }
     }
-
+    /** Output deck as string*/
     public String toString() {
         String cardListOutput = "";
         int i = 1;
@@ -79,11 +98,11 @@ public class Deck {
         }
         return cardListOutput;
     }
-
+    /** Get size of deck*/
     public int deckSize() {
         return this.cards.size();
     }
-
+    /** Check if deck is empty*/
     public boolean isEmpty(){
         return this.cards.isEmpty();
     }
