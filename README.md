@@ -1,2 +1,2 @@
 # Cuarenta
-Cuarenta - Java card game
+Cuarenta - Java - Card - Game
